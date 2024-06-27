@@ -3,6 +3,7 @@
 ## Enter in the directory and Run these in terminal
 
 docker build . -t speedtest
+
 docker run -p 8080:80 <docker-img-name>
 
 ## To test or view, in browser
