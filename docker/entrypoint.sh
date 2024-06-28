@@ -12,7 +12,7 @@ cp /speedtest/*.js /var/www/html/
 # Copy favicon
 cp /speedtest/favicon.ico /var/www/html/
 
-# Copy favicon
+# Copy logo
 cp /speedtest/logo.png /var/www/html/
 
 # Set up backend side for standlone modes
