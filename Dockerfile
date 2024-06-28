@@ -12,11 +12,16 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install -j$(nproc) gd pdo pdo_mysql pdo_pgsql pgsql \
     && rm -rf /var/lib/apt/lists/*
 
+
+# RUN sudo apt install mysql-server -y
+
+
 # Prepare files and folders
 RUN mkdir -p /speedtest/
 
 # Copy sources
 COPY backend/ /speedtest/backend
+
 
 COPY results/*.php /speedtest/results/
 COPY results/*.ttf /speedtest/results/
@@ -26,6 +31,8 @@ COPY favicon.ico /speedtest/
 
 COPY docker/servers.json /servers.json
 
+COPY logo.png /speedtest/
+
 COPY docker/*.php /speedtest/
 COPY docker/entrypoint.sh /
 
@@ -33,7 +40,7 @@ COPY docker/entrypoint.sh /
 ENV TITLE=LibreSpeed
 ENV MODE=standalone
 ENV PASSWORD=password
-ENV TELEMETRY=false
+ENV TELEMETRY=true
 ENV ENABLE_ID_OBFUSCATION=false
 ENV REDACT_IP_ADDRESSES=false
 ENV WEBPORT=80
