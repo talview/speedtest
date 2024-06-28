@@ -129,6 +129,10 @@ var meterBk = /Trident.*rv:(\d+\.\d+)/i.test(navigator.userAgent) ? "#EAEAEA" : 
 			classification === 2?TextElement.style.color = "#16A34A":(classification === 1?TextElement.style.color = "#CA8A04":TextElement.style.color = "#DC2626");
 		}
 
+
+		// First-time flag
+		var first_time = true;
+
 		//UI CODE
 		var uiData = null;
 		function startStop() {
@@ -150,6 +154,8 @@ var meterBk = /Trident.*rv:(\d+\.\d+)/i.test(navigator.userAgent) ? "#EAEAEA" : 
 					updateUI(true);
 					if (!aborted) {
 						//if testId is present, show sharing panel, otherwise do nothing
+						// I("startStopBtn").textContent = "Try Again";
+						I("startStopBtn").className = "new-class";
 						try {
 							var testId = uiData.testId;
 							if (testId != null) {
@@ -354,6 +360,20 @@ var meterBk = /Trident.*rv:(\d+\.\d+)/i.test(navigator.userAgent) ? "#EAEAEA" : 
 		#startStopBtn.running:before {
 			
 			content: "Stop";
+
+			display: flex;
+			width: 136px;
+			height: 50px;
+			padding: 13px 12px;
+			justify-content: center;
+			align-items: center;
+			gap: 8px;
+			flex-shrink: 0;
+		}
+
+		#startStopBtn.new-class:before {
+			
+			content: "Try Again";
 
 			display: flex;
 			width: 136px;
