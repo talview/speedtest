@@ -1,7 +1,7 @@
 <?php
 
 // Type of db: "mssql", "mysql", "sqlite" or "postgresql"
-$db_type = 'mysql';
+$db_type = 'postgresql';
 // Password to login to stats.php. Change this!!!
 $stats_password = 'PASSWORD';
 // If set to true, test IDs will be obfuscated to prevent users from guessing URLs of other tests
@@ -27,6 +27,12 @@ $MySql_password = 'PASSWORD';
 $MySql_hostname = 'DB_HOSTNAME';
 $MySql_databasename = 'DB_NAME';
 $MySql_port = '3306';
+
+// Postgresql settings
+// $PostgreSql_username = 'postgres';
+// $PostgreSql_password = 'postgres';
+// $PostgreSql_hostname = 'localhost';
+// $PostgreSql_databasename = 'postgres';
 
 // Postgresql settings
 $PostgreSql_username = 'USERNAME';
