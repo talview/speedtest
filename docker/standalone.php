@@ -26,34 +26,6 @@ var meterBk = /Trident.*rv:(\d+\.\d+)/i.test(navigator.userAgent) ? "#EAEAEA" : 
 			ulColor = "#616161";
 		var progColor = meterBk;
 
-		//CODE FOR GAUGES
-
-		// function drawMeter(c, amount, bk, fg, progress, prog) {
-		// 	var ctx = c.getContext("2d");
-		// 	var dp = window.devicePixelRatio || 1;
-		// 	var cw = c.clientWidth * dp, ch = c.clientHeight * dp;
-		// 	var sizScale = ch * 0.0055;
-		// 	if (c.width == cw && c.height == ch) {
-		// 		ctx.clearRect(0, 0, cw, ch);
-		// 	} else {
-		// 		c.width = cw;
-		// 		c.height = ch;
-		// 	}
-		// 	ctx.beginPath();
-		// 	ctx.strokeStyle = bk;
-		// 	ctx.lineWidth = 12 * sizScale;
-		// 	ctx.arc(c.width / 2, c.height - 58 * sizScale, c.height / 1.8 - ctx.lineWidth, -Math.PI * 1.1, Math.PI * 0.1);
-		// 	ctx.stroke();
-		// 	ctx.beginPath();
-		// 	ctx.strokeStyle = fg;
-		// 	ctx.lineWidth = 12 * sizScale;
-		// 	ctx.arc(c.width / 2, c.height - 58 * sizScale, c.height / 1.8 - ctx.lineWidth, -Math.PI * 1.1, amount * Math.PI * 1.2 - Math.PI * 1.1);
-		// 	ctx.stroke();
-		// 	if (typeof progress !== "undefined") {
-		// 		ctx.fillStyle = prog;
-		// 		ctx.fillRect(c.width * 0.3, c.height - 16 * sizScale, c.width * 0.4 * progress, 4 * sizScale);
-		// 	}
-		// }
 
 		function mbpsToAmount(s) {
 			return 1 - (1 / (Math.pow(1.3, Math.sqrt(s))));
@@ -83,20 +55,6 @@ var meterBk = /Trident.*rv:(\d+\.\d+)/i.test(navigator.userAgent) ? "#EAEAEA" : 
 
 				const dl_text_element = document.getElementById("dlText");
 				const speed_classification = classifySpeed(value);
-
-				// TextElement.textContent = value;
-
-				// if (classification === "Good") {
-				// 	TextElement.style.color = "#16A34A";
-				// } 
-				// else if (classification === "Average") {
-				// 	TextElement.style.color = "#CA8A04";
-				// }
-				// else {
-				// 	TextElement.style.color = "#DC2626"; // Reset to default color or set another color
-				// }
-
-				// classification === 2?TextElement.style.color = "#16A34A":(classification === 1?TextElement.style.color = "#CA8A04":TextElement.style.color = "#DC2626");
 
 				switch (speed_classification){
 					case 3: dl_text_element.style.color = "#16A34A";
@@ -133,7 +91,6 @@ var meterBk = /Trident.*rv:(\d+\.\d+)/i.test(navigator.userAgent) ? "#EAEAEA" : 
 
 		function classifyPing(value){
 
-			// console.log("Ping Value: ",value);
 			if (value=="") return 0;
 			if (value>100) return 1;
 			if (value>=20) return 2;
@@ -144,7 +101,6 @@ var meterBk = /Trident.*rv:(\d+\.\d+)/i.test(navigator.userAgent) ? "#EAEAEA" : 
 			const ping_element = document.getElementById("pingText");
 			const ping_classification = classifyPing(value)
 
-			// ping_classification === 3?ping_element.style.color = "#16A34A":(ping_classification === 2?ping_element.style.color = "#CA8A04":(ping_classification === 1?ping_element.style.color = "#DC2626":ping_element.style.color = "#111827"));
 
 			switch (ping_classification){
 				case 3: ping_element.style.color = "#16A34A";
@@ -248,17 +204,11 @@ var meterBk = /Trident.*rv:(\d+\.\d+)/i.test(navigator.userAgent) ? "#EAEAEA" : 
 			}else{
 				updateDlColor(uiData.dlStatus);
 				updateUlColor(uiData.ulStatus);
-
 			}
 			
 
 			updatePingColor(uiData.pingStatus);
 			updateJitterColor(uiData.jitterStatus);
-
-			// updateJitterColor(1);
-			// updatePingColor(105);
-			
-			// console.log(uiData);
 
 		}
 		function oscillate() {
@@ -273,15 +223,10 @@ var meterBk = /Trident.*rv:(\d+\.\d+)/i.test(navigator.userAgent) ? "#EAEAEA" : 
 		frame(); //start frame loop
 		//function to (re)initialize UI
 		function initUI() {
-			// drawMeter(I("dlMeter"), 0, meterBk, dlColor, 0);
-			// drawMeter(I("ulMeter"), 0, meterBk, ulColor, 0);
 			I("dlText").textContent = "";
 			I("ulText").textContent = "";
 			I("pingText").textContent = "";
 			I("jitText").textContent = "";
-			// I("ip").textContent = "";
-
-			
 		}
 	</script>
 
@@ -302,14 +247,11 @@ var meterBk = /Trident.*rv:(\d+\.\d+)/i.test(navigator.userAgent) ? "#EAEAEA" : 
 
 		.header {
 			width: 100%;
-			/* margin: -8px; */
 			height: 64px;
 			border: 1px solid;
 			border-color: white;
 			background-color: white;
 			padding: 15px 40px;
-			/* background-repeat:no-repeat;
-			object-fit: cover; */
 
 			position: relative;
 			
@@ -320,20 +262,9 @@ var meterBk = /Trident.*rv:(\d+\.\d+)/i.test(navigator.userAgent) ? "#EAEAEA" : 
 		}
 
 		.logo-container {
-			/* position: absolute; */
-			/* top: 50%; */
-
-			/* transform: translateY(40%);
-			top: 126px;
-			left: 40px;
-			width: 104px;
-			height: 35px; */
 
 			background-repeat: no-repeat;
 			object-fit: cover;
-			/* padding-top: 15px;
-			padding-left:40px;
-			padding-bottom: 15px; */
 			width: auto;
 			height: 100%;
 
@@ -347,18 +278,12 @@ var meterBk = /Trident.*rv:(\d+\.\d+)/i.test(navigator.userAgent) ? "#EAEAEA" : 
 		.container {
 
 			background-color: #F9FAFB;
-			padding-left: 7%;
-			padding-right: 7%;
+			padding-left: 104px;
+			padding-right: 104px;
 			padding-top: 16px;
-			/* padding-bottom: 24px; */
 			padding-bottom: 2.5%;
 			flex: 1;
 			overflow: auto;
-
-
-			/* width: 100%; */
-			/* max-width: 1200px; */
-			/* padding: 20px; */
 			display: flex;
 			flex-direction: column;
 			flex-wrap: wrap;
@@ -371,16 +296,11 @@ var meterBk = /Trident.*rv:(\d+\.\d+)/i.test(navigator.userAgent) ? "#EAEAEA" : 
 			height: 100%;
 			display: flex;
 			flex-direction: column;
-			/* justify-content: center; */
 			align-items: center;
 
 
 			width: 100%;
-			/* background-color: #FFFFFF; */
-			/* padding: 20px; */
 			border-radius: 8px;
-			/* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
-
 			padding-top: 44px;
 			
 
@@ -388,15 +308,9 @@ var meterBk = /Trident.*rv:(\d+\.\d+)/i.test(navigator.userAgent) ? "#EAEAEA" : 
 
 		div.testGroup {
 			display: flex;
-			/* flex-direction: row; */
 			gap: 24px;
 			top:10%;
-
-
-			/* display: flex; */
-			/* flex-wrap: wrap; */
 			justify-content: center;
-			/* gap: 20px; */
 			margin-bottom: 20px;
 		}
 
@@ -476,8 +390,6 @@ var meterBk = /Trident.*rv:(\d+\.\d+)/i.test(navigator.userAgent) ? "#EAEAEA" : 
 		}
 
 		.test {
-			/* top: 125px; */
-			/* position: absolute; */
 			display: flex;
 			flex-direction: column;
 			gap: 20px;
@@ -522,20 +434,13 @@ var meterBk = /Trident.*rv:(\d+\.\d+)/i.test(navigator.userAgent) ? "#EAEAEA" : 
 
 		.title-class{
 			display:flex;
-			/* top: 44px; */
 			top: 3.6%;
-			/* position: absolute; */
 			color: #1F2937;
 			font-family: Roboto;
 			font-size: 32px;
 			font-style: normal;
 			font-weight: 600;
 			line-height: normal;
-
-			/* font-size: 24px; */
-			/* font-weight: 600; */
-			/* margin-bottom: 20px; */
-			/* color: #1F2937; */
 		}
 
 		div.testName {
@@ -555,7 +460,6 @@ var meterBk = /Trident.*rv:(\d+\.\d+)/i.test(navigator.userAgent) ? "#EAEAEA" : 
 			font-style: normal;
 			font-weight: 600;
 			line-height: 36px;
-			/* 120% */
 		}
 
 		div.meterText:empty:before {
@@ -577,7 +481,6 @@ var meterBk = /Trident.*rv:(\d+\.\d+)/i.test(navigator.userAgent) ? "#EAEAEA" : 
 			width: 95%;
 			max-width: 40em;
 			margin: 0 auto;
-			/* margin-top: 2em; */
 			border-radius: 8px;
 		}
 
@@ -615,13 +518,6 @@ var meterBk = /Trident.*rv:(\d+\.\d+)/i.test(navigator.userAgent) ? "#EAEAEA" : 
             .container {
                 padding: 10px !important;
             }
-
-			/* .startBtnStyle{
-				margin-top:32px;
-			} */
-
-            
-
             
         }
 	</style>
@@ -636,7 +532,6 @@ var meterBk = /Trident.*rv:(\d+\.\d+)/i.test(navigator.userAgent) ? "#EAEAEA" : 
 	</div>
 
 	<div class="container">
-		<!-- <h1>LibreSpeed Example</h1> -->
 
 		<div class="child-container">
 
@@ -676,9 +571,7 @@ var meterBk = /Trident.*rv:(\d+\.\d+)/i.test(navigator.userAgent) ? "#EAEAEA" : 
 				</div>	
 
 					
-					<!-- <div id="ipArea">
-						<span id="ip"></span>
-					</div> -->
+					
 					<div id="shareArea" style="display:none">
 						<h3>Share results</h3>
 						<p>Test ID: <span id="testId"></span></p>
@@ -693,8 +586,6 @@ var meterBk = /Trident.*rv:(\d+\.\d+)/i.test(navigator.userAgent) ? "#EAEAEA" : 
 						<div id="startStopBtn" onclick="startStop()"></div>
 					</div>
 				
-
-				<!-- <div id="startStopBtn" onclick="startStop()"></div> -->
 
 
 				
