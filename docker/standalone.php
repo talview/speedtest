@@ -26,34 +26,6 @@ var meterBk = /Trident.*rv:(\d+\.\d+)/i.test(navigator.userAgent) ? "#EAEAEA" : 
 			ulColor = "#616161";
 		var progColor = meterBk;
 
-		//CODE FOR GAUGES
-
-		// function drawMeter(c, amount, bk, fg, progress, prog) {
-		// 	var ctx = c.getContext("2d");
-		// 	var dp = window.devicePixelRatio || 1;
-		// 	var cw = c.clientWidth * dp, ch = c.clientHeight * dp;
-		// 	var sizScale = ch * 0.0055;
-		// 	if (c.width == cw && c.height == ch) {
-		// 		ctx.clearRect(0, 0, cw, ch);
-		// 	} else {
-		// 		c.width = cw;
-		// 		c.height = ch;
-		// 	}
-		// 	ctx.beginPath();
-		// 	ctx.strokeStyle = bk;
-		// 	ctx.lineWidth = 12 * sizScale;
-		// 	ctx.arc(c.width / 2, c.height - 58 * sizScale, c.height / 1.8 - ctx.lineWidth, -Math.PI * 1.1, Math.PI * 0.1);
-		// 	ctx.stroke();
-		// 	ctx.beginPath();
-		// 	ctx.strokeStyle = fg;
-		// 	ctx.lineWidth = 12 * sizScale;
-		// 	ctx.arc(c.width / 2, c.height - 58 * sizScale, c.height / 1.8 - ctx.lineWidth, -Math.PI * 1.1, amount * Math.PI * 1.2 - Math.PI * 1.1);
-		// 	ctx.stroke();
-		// 	if (typeof progress !== "undefined") {
-		// 		ctx.fillStyle = prog;
-		// 		ctx.fillRect(c.width * 0.3, c.height - 16 * sizScale, c.width * 0.4 * progress, 4 * sizScale);
-		// 	}
-		// }
 
 		function mbpsToAmount(s) {
 			return 1 - (1 / (Math.pow(1.3, Math.sqrt(s))));
@@ -83,20 +55,6 @@ var meterBk = /Trident.*rv:(\d+\.\d+)/i.test(navigator.userAgent) ? "#EAEAEA" : 
 
 				const dl_text_element = document.getElementById("dlText");
 				const speed_classification = classifySpeed(value);
-
-				// TextElement.textContent = value;
-
-				// if (classification === "Good") {
-				// 	TextElement.style.color = "#16A34A";
-				// } 
-				// else if (classification === "Average") {
-				// 	TextElement.style.color = "#CA8A04";
-				// }
-				// else {
-				// 	TextElement.style.color = "#DC2626"; // Reset to default color or set another color
-				// }
-
-				// classification === 2?TextElement.style.color = "#16A34A":(classification === 1?TextElement.style.color = "#CA8A04":TextElement.style.color = "#DC2626");
 
 				switch (speed_classification){
 					case 3: dl_text_element.style.color = "#16A34A";
@@ -133,7 +91,6 @@ var meterBk = /Trident.*rv:(\d+\.\d+)/i.test(navigator.userAgent) ? "#EAEAEA" : 
 
 		function classifyPing(value){
 
-			// console.log("Ping Value: ",value);
 			if (value=="") return 0;
 			if (value>100) return 1;
 			if (value>=20) return 2;
@@ -144,7 +101,6 @@ var meterBk = /Trident.*rv:(\d+\.\d+)/i.test(navigator.userAgent) ? "#EAEAEA" : 
 			const ping_element = document.getElementById("pingText");
 			const ping_classification = classifyPing(value)
 
-			// ping_classification === 3?ping_element.style.color = "#16A34A":(ping_classification === 2?ping_element.style.color = "#CA8A04":(ping_classification === 1?ping_element.style.color = "#DC2626":ping_element.style.color = "#111827"));
 
 			switch (ping_classification){
 				case 3: ping_element.style.color = "#16A34A";
@@ -248,16 +204,11 @@ var meterBk = /Trident.*rv:(\d+\.\d+)/i.test(navigator.userAgent) ? "#EAEAEA" : 
 			}else{
 				updateDlColor(uiData.dlStatus);
 				updateUlColor(uiData.ulStatus);
-
 			}
+			
 
 			updatePingColor(uiData.pingStatus);
 			updateJitterColor(uiData.jitterStatus);
-
-			// updateJitterColor(1);
-			// updatePingColor(105);
-			
-			// console.log(uiData);
 
 		}
 		function oscillate() {
@@ -272,15 +223,10 @@ var meterBk = /Trident.*rv:(\d+\.\d+)/i.test(navigator.userAgent) ? "#EAEAEA" : 
 		frame(); //start frame loop
 		//function to (re)initialize UI
 		function initUI() {
-			// drawMeter(I("dlMeter"), 0, meterBk, dlColor, 0);
-			// drawMeter(I("ulMeter"), 0, meterBk, ulColor, 0);
 			I("dlText").textContent = "";
 			I("ulText").textContent = "";
 			I("pingText").textContent = "";
 			I("jitText").textContent = "";
-			// I("ip").textContent = "";
-
-			
 		}
 	</script>
 
@@ -301,16 +247,14 @@ var meterBk = /Trident.*rv:(\d+\.\d+)/i.test(navigator.userAgent) ? "#EAEAEA" : 
 
 		.header {
 			width: 100%;
-			/* margin: -8px; */
 			height: 64px;
 			border: 1px solid;
 			border-color: white;
 			background-color: white;
 			padding: 15px 40px;
-			/* background-repeat:no-repeat;
-			object-fit: cover; */
 
 			position: relative;
+			
 
 		}
 		* {
@@ -318,20 +262,9 @@ var meterBk = /Trident.*rv:(\d+\.\d+)/i.test(navigator.userAgent) ? "#EAEAEA" : 
 		}
 
 		.logo-container {
-			/* position: absolute; */
-			/* top: 50%; */
-
-			/* transform: translateY(40%);
-			top: 126px;
-			left: 40px;
-			width: 104px;
-			height: 35px; */
 
 			background-repeat: no-repeat;
 			object-fit: cover;
-			/* padding-top: 15px;
-			padding-left:40px;
-			padding-bottom: 15px; */
 			width: auto;
 			height: 100%;
 
@@ -341,15 +274,20 @@ var meterBk = /Trident.*rv:(\d+\.\d+)/i.test(navigator.userAgent) ? "#EAEAEA" : 
 			width: auto;
 		}
 
+
 		.container {
 
 			background-color: #F9FAFB;
-			padding-left: 140px;
-			padding-right: 140px;
+			padding-left: 104px;
+			padding-right: 104px;
 			padding-top: 16px;
-			padding-bottom: 24px;
+			padding-bottom: 2.5%;
 			flex: 1;
 			overflow: auto;
+			display: flex;
+			flex-direction: column;
+			flex-wrap: wrap;
+			
 		}
 
 		.child-container {
@@ -358,14 +296,22 @@ var meterBk = /Trident.*rv:(\d+\.\d+)/i.test(navigator.userAgent) ? "#EAEAEA" : 
 			height: 100%;
 			display: flex;
 			flex-direction: column;
-			justify-content: center;
 			align-items: center;
+
+
+			width: 100%;
+			border-radius: 8px;
+			padding-top: 44px;
+			
+
 		}
 
 		div.testGroup {
 			display: flex;
-			flex-direction: row;
 			gap: 24px;
+			top:10%;
+			justify-content: center;
+			margin-bottom: 20px;
 		}
 
 
@@ -373,6 +319,7 @@ var meterBk = /Trident.*rv:(\d+\.\d+)/i.test(navigator.userAgent) ? "#EAEAEA" : 
 			display: flex;
 			align-items: center;
 			justify-content: center;
+			margin-top: 32px;
 		}
 
 		#startStopBtn {
@@ -389,9 +336,6 @@ var meterBk = /Trident.*rv:(\d+\.\d+)/i.test(navigator.userAgent) ? "#EAEAEA" : 
 			font-family: Inter;
 			color: white;
 			font-size: 16px;
-
-
-
 
 		}
 
@@ -442,15 +386,15 @@ var meterBk = /Trident.*rv:(\d+\.\d+)/i.test(navigator.userAgent) ? "#EAEAEA" : 
 			align-items: center;
 			gap: 8px;
 			flex-shrink: 0;
+			
 		}
 
-		#test {
-			top: 125px;
-			position: absolute;
+		.test {
 			display: flex;
 			flex-direction: column;
-			gap: 32px;
-			align-items: center;
+			gap: 20px;
+			align-items: center; 
+			padding-top: 43px;
 		}
 
 		div.testArea {
@@ -464,6 +408,7 @@ var meterBk = /Trident.*rv:(\d+\.\d+)/i.test(navigator.userAgent) ? "#EAEAEA" : 
 			border-radius: 16px;
 			border: 1px solid var(--Monochrome-Grey-7, #D1D5DB);
 			background: var(--Monochrome-White, #FFF);
+
 		}
 
 		div.testArea2 {
@@ -489,8 +434,7 @@ var meterBk = /Trident.*rv:(\d+\.\d+)/i.test(navigator.userAgent) ? "#EAEAEA" : 
 
 		.title-class{
 			display:flex;
-			top: 44px;
-			position: absolute;
+			top: 3.6%;
 			color: #1F2937;
 			font-family: Roboto;
 			font-size: 32px;
@@ -508,19 +452,6 @@ var meterBk = /Trident.*rv:(\d+\.\d+)/i.test(navigator.userAgent) ? "#EAEAEA" : 
 			line-height: normal;
 		}
 
-		div.testArea {
-			display: flex;
-			width: 248px;
-			padding: 24px 33px 24px 24px;
-			flex-direction: column;
-			align-items: flex-start;
-			gap: 12px;
-
-			border-radius: 16px;
-			border: 1px solid var(--Monochrome-Grey-7, #D1D5DB);
-			background: var(--Monochrome-White, #FFF);
-		}
-
 
 		div.meterText {
 			color: var(--Gray-900, #111827);
@@ -529,7 +460,6 @@ var meterBk = /Trident.*rv:(\d+\.\d+)/i.test(navigator.userAgent) ? "#EAEAEA" : 
 			font-style: normal;
 			font-weight: 600;
 			line-height: 36px;
-			/* 120% */
 		}
 
 		div.meterText:empty:before {
@@ -551,7 +481,6 @@ var meterBk = /Trident.*rv:(\d+\.\d+)/i.test(navigator.userAgent) ? "#EAEAEA" : 
 			width: 95%;
 			max-width: 40em;
 			margin: 0 auto;
-			margin-top: 2em;
 			border-radius: 8px;
 		}
 
@@ -561,6 +490,36 @@ var meterBk = /Trident.*rv:(\d+\.\d+)/i.test(navigator.userAgent) ? "#EAEAEA" : 
 			height: auto;
 			margin: 0.25em 0;
 		}
+
+
+
+
+		@media (max-width: 768px) {
+            .testGroup {
+                flex-direction: row;
+                gap: 12px;
+            }
+			
+        }
+
+        @media (max-width: 614px) {
+            .testArea,
+            .testArea2 {
+                width: 100% !important;
+                padding: 12px !important;
+                border-radius: 8px !important;
+                gap: 6px !important;
+            }
+
+            .title-class {
+                font-size: 24px !important;
+            }
+
+            .container {
+                padding: 10px !important;
+            }
+            
+        }
 	</style>
 
 	<title>Talview Speedtest</title>
@@ -573,7 +532,6 @@ var meterBk = /Trident.*rv:(\d+\.\d+)/i.test(navigator.userAgent) ? "#EAEAEA" : 
 	</div>
 
 	<div class="container">
-		<!-- <h1>LibreSpeed Example</h1> -->
 
 		<div class="child-container">
 
@@ -581,7 +539,8 @@ var meterBk = /Trident.*rv:(\d+\.\d+)/i.test(navigator.userAgent) ? "#EAEAEA" : 
 
 				
 				<!-- <a class="privacy" href="#" onclick="I('privacyPolicy').style.display=''">Privacy</a> -->
-				<div id="test">
+				<div class="test">
+
 					<div class="testGroup">
 						<div class="testArea2">
 							<div class="testName">Ping</div>
@@ -609,26 +568,24 @@ var meterBk = /Trident.*rv:(\d+\.\d+)/i.test(navigator.userAgent) ? "#EAEAEA" : 
 						</div>
 					</div>
 
+				</div>	
+
 					
-					<!-- <div id="ipArea">
-						<span id="ip"></span>
-					</div> -->
+					
 					<div id="shareArea" style="display:none">
 						<h3>Share results</h3>
 						<p>Test ID: <span id="testId"></span></p>
 						<input type="text" value="" id="resultsURL" readonly="readonly"
 							onclick="this.select();this.focus();this.select();document.execCommand('copy');alert('Link copied')" />
-						<img src="" id="resultsImg" />
+						<!-- <img src="" id="resultsImg" /> -->
 					</div>
 
 
-					<!-- <div class="startBtnStyle"> -->
+					<div class="startBtnStyle">
 
 						<div id="startStopBtn" onclick="startStop()"></div>
-					<!-- </div> -->
-				</div>
-
-				<!-- <div id="startStopBtn" onclick="startStop()"></div> -->
+					</div>
+				
 
 
 				
