@@ -21,7 +21,10 @@ s.setParameter("getIp_ispInfo",false);
 s.setParameter("getIp_ispInfo_distance","<?=getenv("DISTANCE") ?>");
 <?php } ?>
 
-var meterBk = /Trident.*rv:(\d+\.\d+)/i.test(navigator.userAgent) ? "#EAEAEA" : "#80808040";
+var s = new Speedtest(); //create speedtest object
+		s.setParameter("telemetry_level", "basic"); //enable telemetry
+
+		var meterBk = /Trident.*rv:(\d+\.\d+)/i.test(navigator.userAgent) ? "#EAEAEA" : "#80808040";
 		var dlColor = "#6060AA",
 			ulColor = "#616161";
 		var progColor = meterBk;
@@ -302,6 +305,7 @@ var meterBk = /Trident.*rv:(\d+\.\d+)/i.test(navigator.userAgent) ? "#EAEAEA" : 
 			width: 100%;
 			border-radius: 8px;
 			padding-top: 44px;
+			padding-bottom: 10px;
 			
 
 		}
@@ -311,7 +315,7 @@ var meterBk = /Trident.*rv:(\d+\.\d+)/i.test(navigator.userAgent) ? "#EAEAEA" : 
 			gap: 24px;
 			top:10%;
 			justify-content: center;
-			margin-bottom: 20px;
+			width: 100%;
 		}
 
 
@@ -394,12 +398,15 @@ var meterBk = /Trident.*rv:(\d+\.\d+)/i.test(navigator.userAgent) ? "#EAEAEA" : 
 			flex-direction: column;
 			gap: 20px;
 			align-items: center; 
-			padding-top: 43px;
+			padding: 43px 20px 0 20px;
+			width: 100%;
+
 		}
 
-		div.testArea {
+		div.testArea, div.testArea2 {
 			display: flex;
-			width: 248px;
+			width:100%;
+			max-width: 250px;
 			padding: 24px 33px 24px 24px;
 			flex-direction: column;
 			align-items: flex-start;
@@ -408,23 +415,6 @@ var meterBk = /Trident.*rv:(\d+\.\d+)/i.test(navigator.userAgent) ? "#EAEAEA" : 
 			border-radius: 16px;
 			border: 1px solid var(--Monochrome-Grey-7, #D1D5DB);
 			background: var(--Monochrome-White, #FFF);
-
-		}
-
-		div.testArea2 {
-			display: flex;
-			width: 248px;
-			padding: 24px 33px 24px 24px;
-			flex-direction: column;
-			align-items: flex-start;
-			gap: 12px;
-
-			border-radius: 16px;
-			border: 1px solid var(--Monochrome-Grey-7, #D1D5DB);
-			background: var(--Monochrome-White, #FFF);
-
-
-
 		}
 
 		#testWrapper {
@@ -478,6 +468,7 @@ var meterBk = /Trident.*rv:(\d+\.\d+)/i.test(navigator.userAgent) ? "#EAEAEA" : 
 		}
 
 		#shareArea {
+			padding-top: 20px;
 			width: 95%;
 			max-width: 40em;
 			margin: 0 auto;
@@ -502,24 +493,26 @@ var meterBk = /Trident.*rv:(\d+\.\d+)/i.test(navigator.userAgent) ? "#EAEAEA" : 
 			
         }
 
-        @media (max-width: 614px) {
-            .testArea,
-            .testArea2 {
-                width: 100% !important;
-                padding: 12px !important;
-                border-radius: 8px !important;
-                gap: 6px !important;
-            }
+        @media (max-width: 750px) {
+			.container .testArea,
+			.container .testArea2 {
+				padding: 12px;
+				border-radius: 8px;
+				gap: 6px;
+			}
+			.container .title-class {
+				font-size: 24px;
+			}
+			.container {
+				padding: 10px;
+			}
+		}
 
-            .title-class {
-                font-size: 24px !important;
-            }
-
-            .container {
-                padding: 10px !important;
-            }
-            
-        }
+		@media (max-height: 620px){
+			.child-container{
+				height:auto;
+			}
+		}
 	</style>
 
 	<title>Talview Speedtest</title>
