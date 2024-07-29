@@ -54,7 +54,7 @@ var s = new Speedtest(); //create speedtest object
             
         }
 
-		function classifySpeedUl(value) {
+		function classifySpeedUpload(value) {
 				if (value=="") return 0;
                 if (value > 20) return 3;
                 if (value >= 5) return 2;
@@ -84,7 +84,7 @@ var s = new Speedtest(); //create speedtest object
 		function updateUlColor(value) {
 
 			const ul_text_element = document.getElementById("ulText");
-			const speed_classification = classifySpeedUl(value);
+			const speed_classification = classifySpeedUpload(value);
 
 			switch (speed_classification){
 				case 3: ul_text_element.style.color = "#16A34A";
