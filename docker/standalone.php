@@ -732,6 +732,18 @@
 			initUI();
 		}, 100);
 	</script>
+	<script>
+      window.embeddedChatbotConfig = {
+      chatbotId: "-bDQdBAoEWAettWmMb2-C",
+      domain: "www.chatbase.co"
+      }
+    </script>
+    <script
+      src="https://www.chatbase.co/embed.min.js"
+      chatbotId="-bDQdBAoEWAettWmMb2-C"
+      domain="www.chatbase.co"
+      defer>
+    </script>
 </body>
 
 </html>
