@@ -14,18 +14,17 @@
       let prevTestState = null;
       let flag2 = false;
       let flag = false;
-      let instructionsare = ` 
+      let slow_speed_instructions = ` 
       <ul> 
-  <strong>Improving Your Internet Connection Speed </strong>
-
- <li>Restart your router</li>
- <li> Connect to a different network</li>
-<li> Check for any active VPNs or firewalls</li>
-<li>Use a wired connection instead of Wi-Fi for better stability.</li>
-<li> Put your router in a central location. Make sure that walls or other solid objects aren't blocking your Wi-Fi signal.</li>
-<li> Close apps that you don’t need, as they can slow down your connection.</li>
-<li> Make sure no one else is using the internet while you’re testing. Things like watching/ video streaming will slow down the connection.</li>
- </ul>`;
+        <strong>Improving Your Internet Connection Speed </strong>
+        <li>Restart your router</li>
+        <li> Connect to a different network</li>
+        <li> Check for any active VPNs or firewalls</li>
+        <li>Use a wired connection instead of Wi-Fi for better stability.</li>
+        <li> Put your router in a central location. Make sure that walls or other solid objects aren't blocking your Wi-Fi signal.</li>
+        <li> Close apps that you don't need, as they can slow down your connection.</li>
+        <li> Make sure no one else is using the internet while you're testing. Things like watching/ video streaming will slow down the connection.</li>
+      </ul>`;
 
       function I(i) {
         return document.getElementById(i);
@@ -186,7 +185,7 @@
         flag = false;
         flag2 = false;
 
-        I("instructions").innerHTML = "";
+        I("slow-speed-error-instruction").innerHTML = "";
 
         if (prevTestState == 4) {
           clearmessage();
@@ -198,13 +197,13 @@
           data = null;
           // prevTestState = null;
           I("startStopBtn").className = "";
-          I("message").innerHTML = "";
-          I("message").classList.remove("Loader");
+          I("statusMessage").innerHTML = "";
+          I("statusMessage").classList.remove("Loader");
           initUI();
         } else {
           //test is not running, begin
-          I("message").innerHTML = "Test in progress...";
-          I("message").classList.add("Loader");
+          I("statusMessage").innerHTML = "Test in progress...";
+          I("statusMessage").classList.add("Loader");
           I("startStopBtn").className = "running";
           I("shareArea").style.display = "none";
           s.onupdate = function (data) {
@@ -245,7 +244,6 @@
         if (uiData == null) return;
         var status = uiData.testState;
         // I("ip").textContent = uiData.clientIp;
-        //console.log(uiData);
         I("dlText").textContent =
           status == 1 && uiData.dlStatus == 0 ? "..." : format(uiData.dlStatus);
         // drawMeter(I("dlMeter"), mbpsToAmount(Number(uiData.dlStatus * (status == 1 ? oscillate() : 1))), meterBk, dlColor, Number(uiData.dlProgress), progColor);
@@ -299,9 +297,7 @@
       }
 
       function ToShowStatus() {
-        // console.log("Function Called");
-
-        I("message").classList.remove("Loader");
+        I("statusMessage").classList.remove("Loader");
 
         message = "";
 
@@ -365,21 +361,19 @@
             message +=
               " Please check your connection settings and try again. For help, visit : <a href= https://talview.freshdesk.com/support/solutions/articles/11000129970-steps-to-perform-a-network-test target='_blank'>Talview Support</a> ";
           }
-          document.querySelector("#instructions").innerHTML = instructionsare;
+          document.querySelector("#slow-speed-error-instruction").innerHTML = slow_speed_instructions;
         }
 
-        I("message").innerHTML = message;
+        I("statusMessage").innerHTML = message;
 
-        if (flag) I("message").classList.add("success");
+        if (flag) I("statusMessage").classList.add("success");
 
-        if (!flag) I("message").classList.add("alert-danger");
+        if (!flag) I("statusMessage").classList.add("alert-danger");
       }
 
       function clearmessage() {
-        // console.log("help called");
-
-        I("message").innerHTML = "";
-        I("message").classList.remove("alert-danger");
+        I("statusMessage").innerHTML = "";
+        I("statusMessage").classList.remove("alert-danger");
       }
     </script>
 
@@ -790,8 +784,8 @@
           </div>
         </div>
 
-        <div id="message"></div>
-        <div id="instructions"></div>
+        <div id="statusMessage"></div>
+        <div id="slow-speed-error-instruction"></div>
         <!-- <div id="shareArea"> -->
         <div id="shareArea" style="display: none">
           <h3>Share results</h3>
@@ -877,5 +871,3 @@
     </script>
   </body>
 </html>
-
-
