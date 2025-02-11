@@ -325,21 +325,21 @@
 
         if (uiData?.pingStatus > 50 && uiData?.jitterStatus > 30) {
           if (!flag2)
-            mesage =
+            message =
               "It is recommended to meet threshold speed for a seamless experience. While you can still start with the session, you might encounter errors due to low bandwidth. For help, visit : <a href= https://talview.freshdesk.com/support/solutions/articles/11000129970-steps-to-perform-a-network-test target='_blank'>Talview Support</a>";
           else {
             message += ", and we detected high jitter and ping. ";
           }
         } else if (uiData?.jitterStatus > 30) {
           if (!flag2)
-            mesage =
+            message =
               "It is recommended to meet threshold speed for a seamless experience. While you can still start with the session, you might encounter errors due to low bandwidth. For help, visit : <a href= https://talview.freshdesk.com/support/solutions/articles/11000129970-steps-to-perform-a-network-test target='_blank'>Talview Support</a>";
           else {
             message += ", and we detected high jitter. ";
           }
         } else if (uiData?.pingStatus > 50) {
           if (!flag2)
-            mesage =
+            message =
               "It is recommended to meet threshold speed for a seamless experience. While you can still start with the session, you might encounter errors due to low bandwidth. For help, visit : <a href= https://talview.freshdesk.com/support/solutions/articles/11000129970-steps-to-perform-a-network-test target='_blank'>Talview Support</a>";
           else {
             message += ", and we detected high Ping. ";
