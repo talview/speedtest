@@ -10,6 +10,23 @@
     <script type="text/javascript" src="speedtest.js"></script>
 
     <script type="text/javascript">
+      let message = "";
+      let prevTestState = null;
+      let flag2 = false;
+      let flag = false;
+      let instructionsare = ` 
+      <ul> 
+  <strong>Improving Your Internet Connection Speed </strong>
+
+ <li>Restart your router</li>
+ <li> Connect to a different network</li>
+<li> Check for any active VPNs or firewalls</li>
+<li>Use a wired connection instead of Wi-Fi for better stability.</li>
+<li> Put your router in a central location. Make sure that walls or other solid objects aren't blocking your Wi-Fi signal.</li>
+<li> Close apps that you don’t need, as they can slow down your connection.</li>
+<li> Make sure no one else is using the internet while you’re testing. Things like watching/ video streaming will slow down the connection.</li>
+ </ul>`;
+
       function I(i) {
         return document.getElementById(i);
       }
@@ -43,7 +60,7 @@
       function classifySpeed(value) {
         if (value == "") return 0;
         if (value > 50) return 3;
-        if (value >= 10) return 2;
+        if (value >= 5) return 2;
         return 1;
       }
 
@@ -164,15 +181,30 @@
 
       //UI CODE
       var uiData = null;
+
       function startStop() {
+        flag = false;
+        flag2 = false;
+
+        I("instructions").innerHTML = "";
+
+        if (prevTestState == 4) {
+          clearmessage();
+        }
+
         if (s.getState() == 3) {
           //speedtest is running, abort
           s.abort();
           data = null;
+          // prevTestState = null;
           I("startStopBtn").className = "";
+          I("message").innerHTML = "";
+          I("message").classList.remove("Loader");
           initUI();
         } else {
           //test is not running, begin
+          I("message").innerHTML = "Test in progress...";
+          I("message").classList.add("Loader");
           I("startStopBtn").className = "running";
           I("shareArea").style.display = "none";
           s.onupdate = function (data) {
@@ -213,7 +245,7 @@
         if (uiData == null) return;
         var status = uiData.testState;
         // I("ip").textContent = uiData.clientIp;
-
+        //console.log(uiData);
         I("dlText").textContent =
           status == 1 && uiData.dlStatus == 0 ? "..." : format(uiData.dlStatus);
         // drawMeter(I("dlMeter"), mbpsToAmount(Number(uiData.dlStatus * (status == 1 ? oscillate() : 1))), meterBk, dlColor, Number(uiData.dlProgress), progColor);
@@ -225,7 +257,6 @@
 
         if (status == 1) {
           updateDlColor(uiData.dlStatus);
-          // updateDlColor(30, "download");
         } else if (status == 3) {
           updateUlColor(uiData.ulStatus);
         } else {
@@ -235,6 +266,12 @@
 
         updatePingColor(uiData.pingStatus);
         updateJitterColor(uiData.jitterStatus);
+
+        if (status == 4) {
+          if (prevTestState !== 4) ToShowStatus();
+        }
+
+        prevTestState = uiData.testState;
       }
       function oscillate() {
         return 1 + 0.02 * Math.sin(Date.now() / 100);
@@ -259,6 +296,90 @@
         I("ulText").textContent = "";
         I("pingText").textContent = "";
         I("jitText").textContent = "";
+      }
+
+      function ToShowStatus() {
+        // console.log("Function Called");
+
+        I("message").classList.remove("Loader");
+
+        message = "";
+
+        if (uiData?.dlStatus < 1 && uiData?.ulStatus < 1) {
+          message =
+            "Upload and download speeds are below the recommended threshold";
+          flag2 = true;
+        } else if (uiData?.dlStatus < 1) {
+          message = "Your Download Speed is less than recommended threshold";
+          flag2 = true;
+        } else if (uiData?.ulStatus < 1) {
+          message = " Your Upload Speed is less than recommended threshold";
+          flag2 = true;
+        }
+
+        if (uiData?.pingStatus > 50 && uiData?.jitterStatus > 30) {
+          if (!flag2)
+            mesage =
+              "It is recommended to meet threshold speed for a seamless experience. While you can still start with the session, you might encounter errors due to low bandwidth. For help, visit : <a href= https://talview.freshdesk.com/support/solutions/articles/11000129970-steps-to-perform-a-network-test target='_blank'>Talview.support.com</a>";
+          else {
+            message += ", and we detected high jitter and ping. ";
+          }
+        } else if (uiData?.jitterStatus > 30) {
+          if (!flag2)
+            mesage =
+              "It is recommended to meet threshold speed for a seamless experience. While you can still start with the session, you might encounter errors due to low bandwidth. For help, visit : <a href= https://talview.freshdesk.com/support/solutions/articles/11000129970-steps-to-perform-a-network-test target='_blank'>Talview.support.com</a>";
+          else {
+            message += ", and we detected high jitter. ";
+          }
+        } else if (uiData?.pingStatus > 50) {
+          if (!flag2)
+            mesage =
+              "It is recommended to meet threshold speed for a seamless experience. While you can still start with the session, you might encounter errors due to low bandwidth. For help, visit : <a href= https://talview.freshdesk.com/support/solutions/articles/11000129970-steps-to-perform-a-network-test target='_blank'>Talview.support.com</a>";
+          else {
+            message += ", and we detected high Ping ";
+          }
+        }
+
+        if (
+          !message &&
+          ((uiData?.ulStatus >= 1 && uiData?.ulStatus < 5) ||
+            (uiData?.dlStatus >= 1 && uiData?.dlStatus < 5))
+        ) {
+          message =
+            "It is recommended to meet threshold speed for a seamless experience. While you can still start with the session, you might encounter errors due to low bandwidth. For help, visit: <a href= https://talview.freshdesk.com/support/solutions/articles/11000129970-steps-to-perform-a-network-test target='_blank'>Talview.support.com</a>";
+        }
+
+        if (
+          uiData?.dlStatus >= 5 &&
+          uiData?.ulStatus >= 5 &&
+          uiData?.pingStatus <= 50 &&
+          uiData?.jitterStatus <= 30
+        ) {
+          message =
+            "Your network speed meets the requirements for the session. You’re all set";
+          flag = true;
+        }
+
+        if (!flag) {
+          if (flag2) {
+            message +=
+              " Please check your connection settings and try again. For help, visit : <a href= https://talview.freshdesk.com/support/solutions/articles/11000129970-steps-to-perform-a-network-test target='_blank'>Talview.support.com</a> ";
+          }
+          document.querySelector("#instructions").innerHTML = instructionsare;
+        }
+
+        I("message").innerHTML = message;
+
+        if (flag) I("message").classList.add("success");
+
+        if (!flag) I("message").classList.add("alert-danger");
+      }
+
+      function clearmessage() {
+        // console.log("help called");
+
+        I("message").innerHTML = "";
+        I("message").classList.remove("alert-danger");
       }
     </script>
 
@@ -289,6 +410,14 @@
         box-sizing: border-box;
       }
 
+      .success {
+        color: green;
+      }
+
+      .Loader {
+        color: #1d4ed8;
+      }
+
       .logo-container {
         background-repeat: no-repeat;
         object-fit: cover;
@@ -312,6 +441,8 @@
         display: flex;
         flex-direction: column;
         flex-wrap: wrap;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
       }
 
       .child-container {
@@ -321,7 +452,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-
+        scrollbar-width: none;
         width: 100%;
         border-radius: 8px;
         padding-top: 44px;
@@ -537,6 +668,14 @@
         gap: 5px;
         align-items: baseline;
       }
+      .alert-danger {
+        max-width: 100%;
+        padding: 10px;
+        border-radius: 5px;
+        background-color: #f8d7da;
+        color: #721c24;
+        text-align: center;
+      }
 
       @media (max-width: 768px) {
         .testGroup {
@@ -651,6 +790,9 @@
           </div>
         </div>
 
+        <div id="message"></div>
+        <div id="instructions"></div>
+        <!-- <div id="shareArea"> -->
         <div id="shareArea" style="display: none">
           <h3>Share results</h3>
           <p>Test ID: <span id="testId"></span></p>
