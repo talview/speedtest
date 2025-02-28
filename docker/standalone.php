@@ -46,6 +46,7 @@
         <li> Close apps that you don't need, as they can slow down your connection.</li>
         <li> Make sure no one else is using the internet while you're testing. Things like watching/ video streaming will slow down the connection.</li>
       </ul>`;
+      let tempObserver;
 
     function mbpsToAmount(s) {
       return 1 - 1 / Math.pow(1.3, Math.sqrt(s));
@@ -186,6 +187,8 @@
 
     //UI CODE
     var uiData = null;
+      
+
 
     function startStop() {
       flag = false;
@@ -237,6 +240,7 @@
                 I("resultsURL").value = shareURL;
                 I("testId").innerHTML = testId;
                 I("shareArea").style.display = "";
+               
               }
             } catch (e) { }
           }
@@ -301,14 +305,11 @@
       I("pingText").textContent = "";
       I("jitText").textContent = "";
     }
-
+     
     function ToShowStatus() {
-
-
       I("statusMessage").classList.remove("Loader");
-
       message = "";
-
+      observeResults();
       if (uiData?.dlStatus < 1 && uiData?.ulStatus < 1) {
         message =
           "Upload and download speeds are below the recommended threshold";
@@ -317,7 +318,7 @@
         message = "Your Download Speed is less than recommended threshold";
         flag2 = true;
       } else if (uiData?.ulStatus < 1) {
-        message = " Your Upload Speed is less than recommended threshold";
+        message = "Your Upload Speed is less than recommended threshold";
         flag2 = true;
       }
 
@@ -377,38 +378,58 @@
       if (flag) I("statusMessage").classList.add("success");
 
       if (!flag) I("statusMessage").classList.add("alert-danger");
-    }
+     
 
+  }
     function clearmessage() {
-
-
       I("statusMessage").innerHTML = "";
       I("statusMessage").classList.remove("alert-danger");
     }
+
+    function observeResults() {
+        const Section = document.getElementById("startStopBtn");
+        if (!Section) return;
+     
+        let bodyElement = document.body;
+        tempObserver= new ResizeObserver(() => {
+         
+          Section.scrollIntoView({ behavior: "smooth" });    
+          
+          tempObserver.disconnect();
+          tempObserver = null;
+        });
+        tempObserver.observe( bodyElement);
+     
+      } 
+
+
+    
   </script>
 
   <style type="text/css">
-    html,
-    body {
-      height: 100%;
-      margin: 0;
-    }
-
-    body {
-      display: flex;
-      flex-direction: column;
-    }
+    html,body {
+        height: 100%;
+        margin: 0;
+        overflow-y: auto;
+        display: flex;
+        /* scroll-behavior: smooth;  */
+        flex-direction: column;
+      }
 
     .header {
       width: 100%;
-      height: 64px;
-      border: 1px solid;
-      border-color: white;
-      background-color: white;
-      padding: 15px 40px;
-
-      position: relative;
+        height:42px;
+        border: 1px solid;
+        border-color: white;
+        background-color: white;
+        padding-top: 2px;
+        padding-bottom: 2px;
+        padding-left: 40px;
+        padding-right: 40px;     
+        position:relative;
+        
     }
+   
 
     * {
       box-sizing: border-box;
@@ -416,10 +437,14 @@
 
     .success {
       color: green;
+      font-family: Roboto;
+      width: 90%;
+      text-align: center;
     }
 
     .Loader {
       color: #1d4ed8;
+      font-family: Roboto;
     }
 
     .logo-container {
@@ -435,34 +460,29 @@
     }
 
     .container {
-      background-color: #f9fafb;
-      padding-left: 104px;
-      padding-right: 104px;
-      padding-top: 16px;
-      padding-bottom: 2.5%;
-      flex: 1;
-      overflow: auto;
-      display: flex;
-      flex-direction: column;
-      flex-wrap: wrap;
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-    }
+        background-color: #f9fafb;
+        padding-left: 104px;
+        padding-right: 104px;
+        padding-top: 14px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        overflow: visible;    
+      }
 
-    .child-container {
-      position: relative;
-      background-color: white;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      scrollbar-width: none;
-      width: 100%;
-      border-radius: 8px;
-      padding-top: 44px;
-      padding-bottom: 10px;
-      overflow: auto;
-    }
+      .child-container {
+        position: relative;
+        background-color: white;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        border-radius: 8px;
+        padding-top: 16px;
+        padding-bottom: 10px;
+      }
 
     div.testGroup {
       display: flex;
@@ -540,42 +560,42 @@
     }
 
     .test {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      align-items: center;
-      padding: 43px 20px 0 20px;
-      width: 100%;
-    }
+        display: flex;
+        flex-direction: column;     
+        gap:5px;
+        align-items: center;
+        padding: 11px 20px 0 20px;
+        width: 100%;
+      }
 
-    div.testArea {
-      display: flex;
-      width: 100%;
-      max-width: 250px;
-      padding: 24px 33px 24px 24px;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 12px;
 
-      border-radius: 16px;
-      border: 1px solid var(--Monochrome-Grey-7, #d1d5db);
-      background: var(--Monochrome-White, #fff);
-    }
+      div.testArea {
+        display: flex;
+        width: 100%;
+        max-width: 250px;
+        padding :14px 33px 14px 24px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
 
-    .testArea2 {
-      display: flex;
-      width: 100%;
-      max-width: 250px;
-      padding: 24px 33px 24px 24px;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 12px;
+        border-radius: 16px;
+        border: 1px solid var(--Monochrome-Grey-7, #d1d5db);
+        background: var(--Monochrome-White, #fff);
+      }
 
-      border-radius: 16px;
-      border: 1px solid var(--Monochrome-Grey-7, #d1d5db);
-      background: var(--Monochrome-White, #fff);
-    }
+      .testArea2 {
+        display: flex;
+        width: 100%;
+        max-width: 250px;
+        padding: 14px 33px 14px 24px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
 
+        border-radius: 16px;
+        border: 1px solid var(--Monochrome-Grey-7, #d1d5db);
+        background: var(--Monochrome-White, #fff);
+      }
     #testWrapper {
       display: flex;
       flex-direction: column;
@@ -657,7 +677,7 @@
       align-items: center;
       text-align: center;
       margin-bottom: 20px;
-      /* Add spacing below the container */
+     
     }
 
     .recommended {
@@ -667,6 +687,9 @@
       line-height: 18.75px;
       text-align: left;
     }
+    .instructions{
+        font-family: Roboto;
+      }
 
     .one-line {
       display: flex;
@@ -675,44 +698,56 @@
     }
 
     .alert-danger {
-      max-width: 100%;
-      padding: 10px;
-      border-radius: 5px;
-      background-color: #f8d7da;
-      color: #721c24;
-      text-align: center;
-    }
-
-    @media (max-width: 768px) {
-      .testGroup {
-        flex-direction: row;
-        gap: 12px;
-      }
-    }
-
-    @media (max-width: 750px) {
-
-      .container .testArea,
-      .container .testArea2 {
-        padding: 12px;
-        border-radius: 8px;
-        gap: 6px;
-      }
-
-      .container .title-class {
-        font-size: 24px;
-      }
-
-      .container {
+        max-width: 85%;
         padding: 10px;
+        border-radius: 5px;
+        background-color: #f8d7da;
+        color: #721c24;
+        text-align: center;
+        font-family: Roboto;
       }
-    }
 
-    @media (max-height: 620px) {
-      .child-container {
-        height: auto;
-      }
+   
+    @media (max-width: 768px) {
+    body{
+      overflow-y: auto;
     }
+     .testGroup {
+    flex-direction: row;
+    gap: 12px;
+     }
+   }
+
+  @media (max-width: 750px) {
+   .container .testArea,
+   body{
+      overflow-y: auto;
+    }
+   .container .testArea2 {
+    padding: 12px;
+    border-radius: 8px;
+    gap: 6px;
+   }
+
+   .container .title-class {
+    font-size: 24px;
+  }
+
+  
+    .container {
+    padding: 10px 10px 10px 10px; 
+    }
+  }
+
+  @media (max-height: 620px) {
+    body{
+      overflow-y: auto;
+    }
+  .child-container {
+    height: auto;
+   }
+  }
+
   </style>
 
   <title>Talview Speedtest</title>
@@ -798,7 +833,7 @@
       </div>
 
       <div id="statusMessage"></div>
-      <div id="slow-speed-error-instruction"></div>
+      <div id="slow-speed-error-instruction" class="instructions"></div>
       <!-- <div id="shareArea"> -->
       <div id="shareArea" style="display: none">
         <h3>Share results</h3>
@@ -871,6 +906,7 @@
     setTimeout(function () {
       initUI();
     }, 100);
+   
   </script>
 </body>
 
