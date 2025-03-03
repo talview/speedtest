@@ -301,7 +301,7 @@
 
         message = "";
         observeResults();
-        
+
         if (uiData?.dlStatus < 1 && uiData?.ulStatus < 1) {
           message =
             "Upload and download speeds are below the recommended threshold";
@@ -371,34 +371,26 @@
         if (flag) I("statusMessage").classList.add("success");
 
         if (!flag) I("statusMessage").classList.add("alert-danger");
-       
-       
-        
       }
 
       function clearmessage() {
         I("statusMessage").innerHTML = "";
         I("statusMessage").classList.remove("alert-danger");
       }
-      
+
       function observeResults() {
         const Section = document.getElementById("startStopBtn");
         if (!Section) return;
-     
+
         let bodyElement = document.body;
-        tempObserver= new ResizeObserver(() => {
-         
-          Section.scrollIntoView({ behavior: "smooth" });    
-          
+        tempObserver = new ResizeObserver(() => {
+          Section.scrollIntoView({ behavior: "smooth" });
+
           tempObserver.disconnect();
           tempObserver = null;
         });
-        tempObserver.observe( bodyElement);
-     
-      } 
-     
-
-      
+        tempObserver.observe(bodyElement);
+      }
     </script>
 
     <style type="text/css">
