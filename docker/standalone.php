@@ -721,16 +721,19 @@
 
     @media (max-width: 750px) {
 
-      .container .testArea,
       body {
         overflow-y: auto;
       }
 
+      .container .testArea, 
       .container .testArea2 {
         padding: 12px;
         border-radius: 8px;
         gap: 6px;
-      }
+      } 
+
+     
+
 
       .container .title-class {
         font-size: 24px;
