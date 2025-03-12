@@ -40,7 +40,7 @@ COPY docker/entrypoint.sh /
 ENV TITLE=LibreSpeed
 ENV MODE=standalone
 ENV PASSWORD=password
-ENV TELEMETRY=true
+ENV TELEMETRY=false
 ENV ENABLE_ID_OBFUSCATION=false
 ENV REDACT_IP_ADDRESSES=false
 ENV WEBPORT=80
