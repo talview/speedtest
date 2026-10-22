@@ -1,4 +1,5 @@
-FROM php:8-apache
+# Pinned to a patched release (CVE-2026-109618/109619). Bump deliberately; do not use a floating tag.
+FROM php:8.4.27-apache
 
 # Install extensions
 RUN apt-get update && apt-get install -y \
@@ -11,6 +12,8 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
     && docker-php-ext-install -j$(nproc) gd pdo pdo_mysql pdo_pgsql pgsql \
     && rm -rf /var/lib/apt/lists/*
+
+COPY docker/speedtest-php.ini ${PHP_INI_DIR}/conf.d/99-speedtest.ini
 
 
 # RUN sudo apt install mysql-server -y
