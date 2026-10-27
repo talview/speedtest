@@ -70,7 +70,7 @@ function getPdo($returnErrorMessage = false)
 			if($MsSql_WindowsAuthentication){
 				return new PDO($dsn, "", "", $pdoOptions);
 			} else {
-				return new PDO($dsn, $MySql_username, $MySql_password, $pdoOptions);
+				return new PDO($dsn, $MsSql_username, $MsSql_password, $pdoOptions);
 			}
         }
 
@@ -104,22 +104,38 @@ function getPdo($returnErrorMessage = false)
                 return false;
             }
 
+			// Check if directory exists and is writable
+			$db_dir = dirname($Sqlite_db_file);
+			if (!is_dir($db_dir)) {
+				if ($returnErrorMessage) {
+					return "SQLite database directory does not exist: " . $db_dir . ". Please create it and ensure it's writable by the web server.";
+				}
+				return false;
+			}
+			if (!is_writable($db_dir)) {
+				if ($returnErrorMessage) {
+					return "SQLite database directory is not writable: " . $db_dir . ". Please ensure the web server has write permissions (e.g., chmod 755 or 775).";
+				}
+				return false;
+			}
+
             $pdo = new PDO('sqlite:'.$Sqlite_db_file, null, null, $pdoOptions);
 
+            # TODO: Why create table only in sqlite mode?
             $pdo->exec('
                 CREATE TABLE IF NOT EXISTS `speedtest_users` (
-                `id`    INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-                `ispinfo`    text,
-                `extra`    text,
-                `timestamp`     timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                `ip`    text NOT NULL,
-                `ua`    text NOT NULL,
-                `lang`  text NOT NULL,
-                `dl`    text,
-                `ul`    text,
-                `ping`  text,
-                `jitter`        text,
-                `log`   longtext
+                `id`        INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                `ispinfo`   text,
+                `extra`     text,
+                `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                `ip`        text NOT NULL,
+                `ua`        text NOT NULL,
+                `lang`      text NOT NULL,
+                `dl`        text,
+                `ul`        text,
+                `ping`      text,
+                `jitter`    text,
+                `log`       longtext
                 );
             ');
 
