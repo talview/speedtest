@@ -200,24 +200,19 @@ Requirements:
 To install the speed test frontend, copy the project files to your web server, keeping the layout they have in the repository:
 
 * `index.html`
-* `index-classic.html`
-* `index-modern.html`
-* `design-switch.js`
-* `config.json`
 * `settings.json`
 * `server-list.json`
 * `speedtest.js`
 * `speedtest_worker.js`
 * `favicon.ico`
 * the `backend` folder
-* the `frontend` folder, copied as a whole: the modern UI loads its assets from `frontend/`
 * Optionally, the `results` folder
 
 __Important:__ The speed test needs read and execute permissions in the installation folder where applicable!
 
 ##### Server list
 
-Edit `index-classic.html` and uncomment the list of servers:
+Edit `index.html` and uncomment the list of servers:
 
 ```js
 var SPEEDTEST_SERVERS=[

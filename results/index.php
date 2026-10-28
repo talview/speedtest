@@ -16,8 +16,6 @@ const SS = 3;
 const WIDTH = 800;
 const HEIGHT = 480;
 
-// Palette taken from frontend/styling/colors.css, so the image matches the
-// modern frontend rather than inventing a second look for the same project.
 const C_CARD = [14, 7, 32];         // --background-backup-color
 const C_PANEL = [23, 16, 42];
 const C_PANEL_EDGE = [42, 32, 64];
@@ -449,152 +447,7 @@ function formatSpeedtestDataForImage($speedtest)
 }
 
 /**
- * Draws the result in the modern dark design, matching index-modern.html.
- *
- * @param array $speedtest
- *
- * @return void
- */
-function drawModernImage($speedtest)
-{
-    $data = formatSpeedtestDataForImage($speedtest);
-
-    $W = WIDTH * SS;
-    $H = HEIGHT * SS;
-    $im = imagecreatetruecolor($W, $H);
-    imagealphablending($im, false);
-    imagesavealpha($im, true);
-    imagefilledrectangle($im, 0, 0, $W, $H, imagecolorallocatealpha($im, 0, 0, 0, 127));
-    imagealphablending($im, true);
-
-    $FONT_BOLD = tryFont('OpenSans-Semibold');
-    $FONT_LIGHT = tryFont('OpenSans-Light');
-
-    $card = col($im, C_CARD);
-    $panelFill = col($im, C_PANEL);
-    $panelEdge = col($im, C_PANEL_EDGE);
-    $white = col($im, C_TEXT);
-    $dim = col($im, C_TEXT_DIM);
-
-    // the whole canvas is the card, with rounded corners over transparency so
-    // it sits on any page background
-    roundedRect($im, 0, 0, $W - 1, $H - 1, 18 * SS, $card);
-
-    $M = 24 * SS;
-
-    // ---- header -------------------------------------------------------
-    $headerBaseline = 46 * SS;
-    text($im, $M, $headerBaseline, 21 * SS, $FONT_BOLD, $white, 'LibreSpeed');
-    trackedText($im, $W / 2, $headerBaseline - 4 * SS, 10 * SS, $FONT_BOLD, $dim, 'INTERNET SPEED TEST', 3 * SS, 'center');
-
-    $family = $data['family'];
-    if ('' !== $family) {
-        $fw = textWidth($family, $FONT_BOLD, 11 * SS);
-        $chipW = $fw + 22 * SS;
-        $chipH = 26 * SS;
-        $chipX = $W - $M - $chipW;
-        $chipY = $headerBaseline - 19 * SS;
-        roundedRect($im, $chipX, $chipY, $chipX + $chipW, $chipY + $chipH, $chipH / 2, col($im, C_DOWNLOAD, 100));
-        roundedRect($im, $chipX + SS, $chipY + SS, $chipX + $chipW - SS, $chipY + $chipH - SS, $chipH / 2 - SS, $card);
-        text($im, $chipX + $chipW / 2, $chipY + 18 * SS, 11 * SS, $FONT_BOLD, col($im, C_DOWNLOAD), $family, 'center');
-    }
-
-    // ---- download and upload -----------------------------------------
-    $panelTop = 72 * SS;
-    $panelBottom = 286 * SS;
-    $gap = 16 * SS;
-    $panelW = ($W - 2 * $M - $gap) / 2;
-    $radius = 14 * SS;
-
-    $columns = [
-        [$M, $data['dl'], 'DOWNLOAD', C_DOWNLOAD, true],
-        [$M + $panelW + $gap, $data['ul'], 'UPLOAD', C_UPLOAD, false],
-    ];
-
-    foreach ($columns as list($x1, $value, $label, $rgb, $down)) {
-        $x2 = $x1 + $panelW;
-        panel($im, $x1, $panelTop, $x2, $panelBottom, $radius, $panelFill, $panelEdge);
-        wash($im, $x1 + SS, $panelTop + SS, $x2 - SS, $panelBottom - SS, $radius - SS, $rgb, 78 * SS);
-
-        $badgeR = 19 * SS;
-        $labelW = trackedWidth($label, $FONT_BOLD, 13 * SS, 2.5 * SS);
-        $groupW = 2 * $badgeR + 14 * SS + $labelW;
-        $groupX = $x1 + ($panelW - $groupW) / 2;
-
-        directionBadge($im, $groupX + $badgeR, $panelTop + 46 * SS, $badgeR, $rgb, $down);
-        trackedText($im, $groupX + 2 * $badgeR + 14 * SS, $panelTop + 52 * SS, 13 * SS, $FONT_BOLD, col($im, $rgb), $label, 2.5 * SS);
-
-        text($im, $x1 + $panelW / 2, $panelTop + 140 * SS, 58 * SS, $FONT_LIGHT, $white, $value, 'center');
-        text($im, $x1 + $panelW / 2, $panelTop + 178 * SS, 19 * SS, $FONT_LIGHT, $dim, 'Mbps', 'center');
-    }
-
-    // ---- ping and jitter ----------------------------------------------
-    $pjTop = 298 * SS;
-    $pjBottom = 376 * SS;
-    panel($im, $M, $pjTop, $W - $M, $pjBottom, $radius, $panelFill, $panelEdge);
-
-    $mid = $W / 2;
-    imageline($im, (int) $mid, (int) ($pjTop + 18 * SS), (int) $mid, (int) ($pjBottom - 18 * SS), $panelEdge);
-
-    $metrics = [
-        [$M, $data['ping'], 'PING', C_DOWNLOAD, false],
-        [$mid, $data['jitter'], 'JITTER', C_UPLOAD, true],
-    ];
-
-    foreach ($metrics as list($half, $value, $label, $rgb, $wave)) {
-        $badgeR = 19 * SS;
-        $cx = $half + 58 * SS;
-        $cy = ($pjTop + $pjBottom) / 2;
-        traceBadge($im, $cx, $cy, $badgeR, $rgb, $wave);
-
-        $tx = $cx + $badgeR + 18 * SS;
-        trackedText($im, $tx, $cy - 12 * SS, 11 * SS, $FONT_BOLD, col($im, $rgb), $label, 2.5 * SS);
-        $vw = text($im, $tx, $cy + 25 * SS, 29 * SS, $FONT_LIGHT, $white, $value);
-        text($im, $tx + $vw + 7 * SS, $cy + 25 * SS, 14 * SS, $FONT_LIGHT, $dim, 'ms');
-    }
-
-    // ---- footer --------------------------------------------------------
-    $fTop = 390 * SS;
-    $fBottom = 456 * SS;
-    panel($im, $M, $fTop, $W - $M, $fBottom, $radius, $panelFill, $panelEdge);
-
-    $fx = $M + 22 * SS;
-    $wmW = textWidth('LibreSpeed', $FONT_BOLD, 15 * SS);
-    $wmX = $W - $M - 22 * SS;
-
-    $isp = fitText($data['ispinfo'], $FONT_BOLD, 15 * SS, $wmX - $wmW - $fx - 20 * SS);
-    text($im, $fx, $fTop + 30 * SS, 15 * SS, $FONT_BOLD, $white, $isp);
-
-    $stamp = trim($data['date'].('' === $data['time'] ? '' : '   '.$data['time']));
-    $sw = text($im, $fx, $fTop + 56 * SS, 12 * SS, $FONT_LIGHT, $dim, $stamp);
-
-    $client = trim((string) $data['ua']);
-    if ('' !== $client) {
-        $cx = $fx + $sw + 18 * SS;
-        $client = fitText($client, $FONT_LIGHT, 12 * SS, $wmX - $wmW - $cx - 20 * SS);
-        text($im, $cx, $fTop + 56 * SS, 12 * SS, $FONT_LIGHT, $dim, $client);
-    }
-
-    text($im, $wmX, $fTop + 48 * SS, 15 * SS, $FONT_BOLD, col($im, C_TEXT_DIM), 'LibreSpeed', 'right');
-
-    // ---- scale down ----------------------------------------------------
-    $out = imagecreatetruecolor(WIDTH, HEIGHT);
-    imagealphablending($out, false);
-    imagesavealpha($out, true);
-    imagefilledrectangle($out, 0, 0, WIDTH, HEIGHT, imagecolorallocatealpha($out, 0, 0, 0, 127));
-    imagecopyresampled($out, $im, 0, 0, 0, 0, WIDTH, HEIGHT, $W, $H);
-    imagedestroy($im);
-
-    header('Content-Type: image/png');
-    imagepng($out);
-}
-
-/**
- * Draws the result in the classic light design, as index-classic.html uses.
- *
- * Kept as it was drawn before the modern design existed: a deployment serving
- * the classic frontend would otherwise get an image that matches nothing on
- * its own page.
+ * Draws the result image, matching the Talview page (index.html).
  *
  * @param array $speedtest
  *
@@ -739,48 +592,9 @@ function drawClassicImage($speedtest)
     imagepng($im);
 }
 
-/**
- * Which of the two designs to draw.
- *
- * The frontends both link the same URL, so the image cannot tell which page a
- * result came from. An explicit style parameter decides, which is what lets the
- * modern frontend ask for the design it matches and what makes an existing
- * share link render either way on demand.
- *
- * Without one the image follows useNewDesign, the same switch the frontend
- * already reads, so a deployment has one setting rather than two that can
- * disagree. A missing or unreadable config.json means classic, which is what
- * design-switch.js falls back to as well.
- *
- * @return string
- */
-function resultImageStyle()
-{
-    if (isset($_GET['style'])) {
-        $style = strtolower(trim((string) $_GET['style']));
-        if ('modern' === $style) {
-            return 'modern';
-        }
-        if ('classic' === $style) {
-            return 'classic';
-        }
-    }
-
-    $config = json_decode((string) @file_get_contents(__DIR__.'/../config.json'), true);
-    if (is_array($config) && isset($config['useNewDesign']) && true === $config['useNewDesign']) {
-        return 'modern';
-    }
-
-    return 'classic';
-}
-
 $speedtest = getSpeedtestUserById($_GET['id']);
 if (!is_array($speedtest)) {
     exit(1);
 }
 
-if ('modern' === resultImageStyle()) {
-    drawModernImage($speedtest);
-} else {
-    drawClassicImage($speedtest);
-}
+drawClassicImage($speedtest);

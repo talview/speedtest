@@ -17,13 +17,8 @@ Build a deterministic Playwright test suite that validates LibreSpeed behavior a
 - `frontend`
 - `dual`
 
-### UI design modes
-- Classic (`index-classic.html`)
-- Modern (`index-modern.html`)
-- Switcher behavior from `index.html`:
-  - default from `config.json` (`useNewDesign`)
-  - `?design=new` override
-  - `?design=old` override
+### UI
+- Talview page (`index.html`); the upstream modern design and design switcher were removed
 
 ## Test Strategy
 
@@ -76,7 +71,6 @@ Expectations:
 ### Files
 - `playwright.config.js`
 - `tests/e2e/modes.spec.js` (runtime-mode smoke)
-- `tests/e2e/design-switch.spec.js` (classic/modern/switch overrides)
 - `tests/e2e/classic-standalone-regression.spec.js` (revert regression guard)
 - `tests/e2e/helpers/env.js` (base URLs + mode metadata)
 - `tests/e2e/helpers/ui.js` (shared selectors, start/abort helpers)

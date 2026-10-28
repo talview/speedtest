@@ -4,8 +4,6 @@ const baseUrls = {
   frontend: 'http://127.0.0.1:18182',
   dual: 'http://127.0.0.1:18183',
   frontendRemote: 'http://127.0.0.1:18188',
-  standaloneNew: 'http://127.0.0.1:18185',
-  standaloneApostrophe: 'http://127.0.0.1:18186',
   standaloneAlpine: 'http://127.0.0.1:18187',
 };
 

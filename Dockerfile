@@ -20,7 +20,6 @@ RUN mkdir -p /speedtest/
 
 # Copy sources
 COPY backend/ /speedtest/backend
-COPY frontend/ /speedtest/frontend
 
 
 COPY results/*.php /speedtest/results/
@@ -28,9 +27,6 @@ COPY results/*.ttf /speedtest/results/
 
 COPY *.js /speedtest/
 COPY index.html /speedtest/
-COPY index-classic.html /speedtest/
-COPY index-modern.html /speedtest/
-COPY config.json /speedtest/
 COPY settings.json /speedtest/
 COPY server-list.json /speedtest/
 COPY stability.html /speedtest/
@@ -46,14 +42,12 @@ COPY docker/entrypoint.sh /
 
 # Prepare default environment variables
 ENV TITLE=LibreSpeed
-ENV TAGLINE="No Flash, No Java, No Websockets, No Bullsh*t"
 ENV MODE=standalone
 ENV PASSWORD=password
 ENV TELEMETRY=true
 ENV ENABLE_ID_OBFUSCATION=false
 ENV REDACT_IP_ADDRESSES=false
 ENV WEBPORT=80
-ENV USE_NEW_DESIGN=false
 
 # https://httpd.apache.org/docs/2.4/stopping.html#gracefulstop
 STOPSIGNAL SIGWINCH
