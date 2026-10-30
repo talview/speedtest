@@ -1,0 +1,33 @@
+const { test, expect } = require("@playwright/test");
+
+const staticRepositoryUrl = "http://127.0.0.1:18184";
+
+const expectedAssets = [
+  "/index.html",
+  "/settings.json",
+  "/server-list.json",
+  "/speedtest.js",
+  "/speedtest_worker.js",
+  "/logo.png",
+  "/images/icon-192.png"
+];
+
+test.describe("Unmodified repository static assets", () => {
+  test("serves every frontend dependency and returns 404 for a missing path", async ({ request }) => {
+    for (const path of expectedAssets) {
+      const response = await request.get(`${staticRepositoryUrl}${path}`);
+      expect(response.ok(), `${path} should return 2xx`).toBeTruthy();
+    }
+
+    const missing = await request.get(`${staticRepositoryUrl}/does-not-exist`);
+    expect(missing.status()).toBe(404);
+  });
+
+  test("returns 400 for malformed percent-encoded paths without stopping the server", async ({ request }) => {
+    const malformed = await request.get(`${staticRepositoryUrl}/%E0%A4%A`);
+    expect(malformed.status()).toBe(400);
+
+    const followingRequest = await request.get(`${staticRepositoryUrl}/settings.json`);
+    expect(followingRequest.status()).toBe(200);
+  });
+});

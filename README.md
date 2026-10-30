@@ -20,13 +20,16 @@ No Flash, No Java, No Websocket, No Bullshit.
 This is a very lightweight speed test implemented in Javascript, using XMLHttpRequest and Web Workers.
 
 ## Try it
+
 [Take a speed test](https://librespeed.org)
 
 ## Compatibility
+
 All modern browsers are supported: IE11, latest Edge, latest Chrome, latest Firefox, latest Safari.
 Works with mobile versions too.
 
 ## Features
+
 * Download
 * Upload
 * Ping
@@ -35,56 +38,80 @@ Works with mobile versions too.
 * Telemetry (optional)
 * Results sharing (optional)
 * Multiple Points of Test (optional)
+* Connection stability test with latency charting, loss tracking, threshold alerts, and CSV export
 
-![Screenrecording of a running Speedtest](https://speedtest.fdossena.com/mpot_v6.gif)
-
+![Screenrecording of a running Speedtest](https://speedtest.fdossena.com/mpot_v7.gif)
 
 ## Server requirements
+
 * A reasonably fast web server with Apache 2 (nginx, IIS also supported)
 * PHP 5.4 or newer (other backends also available)
-* MySQL database to store test results (optional, Microsoft SQL Server, PostgreSQL and SQLite also supported)
+* MariaDB or MySQL database to store test results (optional, Microsoft SQL Server, PostgreSQL and SQLite also supported)
 * A fast! internet connection
 
 ## Installation
-Assuming you have PHP installed, the installation steps are quite simple.
-I set this up on a QNAP.
-For this example, I am using a folder called **speedtest** in my web share area.
 
-1. Choose one of the example-xxx.html files in `examples` folder as your index.html if the default index.html does not fit.
-2. Add: speedtest.js, speedtest_worker.js, and favicon.ico to your speedtest folder.
-3. Download all of the backend folder into speedtest/backend.
-4. Download all of the results folder into speedtest/results.
-5. Be sure your permissions allow execute (755).
-6. Visit YOURSITE/speedtest/index.html and voila!
+Assuming you have PHP and a web server installed, the installation steps are quite simple.
+
+1. Download the source code and extract it
+1. Copy the project files to your web server's shared folder (ie. `/var/www/html/speedtest` for Apache), keeping the layout as it is in the repository.
+1. Optionally, copy the results folder too, and set up the database using the config file in it.
+1. Be sure your permissions allow read and execute access where needed.
+1. Visit YOURSITE/speedtest/index.html and voila!
 
 ### Installation Video
-There is a more in-depth installation video here:
-* [Quick start installation guide for Ubuntu Server 19.04](https://fdossena.com/?p=speedtest/quickstart_v5_ubuntu.frag)
+
+This video shows the installation process of a standalone LibreSpeed server: [Quick start installation guide for Debian 12](https://fdossena.com/?p=speedtest/quickstart_deb12.frag)
+
+More videos will be added later.
 
 ## Android app
+
 A template to build an Android client for your LibreSpeed installation is available [here](https://github.com/librespeed/speedtest-android).
 
 ## CLI client
+
 A command line client is available [here](https://github.com/librespeed/speedtest-cli).
 
+## .NET client
+
+A .NET client library is available in the [`LibreSpeed.NET`](https://github.com/Memphizzz/LibreSpeed.NET) repo ([NuGet](https://www.nuget.org/packages/LibreSpeed.NET)), maintained by [MemphiZ](https://github.com/Memphizzz).
+
+## Development
+
+If you want to contribute or develop with LibreSpeed, see [DEVELOPMENT.md](DEVELOPMENT.md) for information about using npm for development tasks, linting, and formatting.
+
+## Stability test
+
+LibreSpeed includes a standalone connection stability test at `stability.html`, available alongside the main page. It repeatedly measures ping over a selected duration and reports current, average, minimum, maximum, jitter, and failed request percentage values with a live chart.
+
+The stability test can target the local LibreSpeed backend, one of the configured multiple points of test, or built-in external targets such as Google, Cloudflare, and Apple. It also supports optional latency threshold alerts and CSV export of the collected samples. Docker deployments copy `stability.html` and `stability_worker.js` into the web root and reuse the same server list configuration as the main UI.
+
 ## Docker
+
 A docker image is available on [GitHub](https://github.com/librespeed/speedtest/pkgs/container/speedtest), check our [docker documentation](doc_docker.md) for more info about it.
+The image is built every week to include an updated version of the ipinfo-DB used for ISP detection. Also this ensures, that the latest security patches in PHP are installed. Therefore we recommend to use the `latest` image.
 
 ## Go backend
+
 A Go implementation is available in the [`speedtest-go`](https://github.com/librespeed/speedtest-go) repo, maintained by [Maddie Zhan](https://github.com/maddie).
 
 ## Rust backend
+
 A Rust implementation is available in the [`speedtest-rust`](https://github.com/librespeed/speedtest-rust) repo, maintained by [Sudo Dios](https://github.com/sudodios).
 
 ## Node.js backend
+
 A partial Node.js implementation is available in the `node` branch, developed by [dunklesToast](https://github.com/dunklesToast). It's not recommended to use at the moment.
 
 ## Donate
+
 [![Donate with Liberapay](https://liberapay.com/assets/widgets/donate.svg)](https://liberapay.com/fdossena/donate)
 [Donate with PayPal](https://www.paypal.me/sineisochronic)
 
 ## License
-Copyright (C) 2016-2022 Federico Dossena
+
+Copyright (C) 2016-2024 Federico Dossena
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by

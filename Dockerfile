@@ -1,22 +1,18 @@
 # Pinned to a patched release (CVE-2026-109618/109619). Bump deliberately; do not use a floating tag.
 FROM php:8.4.27-apache
 
-# Install extensions
-RUN apt-get update && apt-get install -y \
-    libfreetype6-dev \
-    libjpeg62-turbo-dev \
-    libpng-dev \
-    libpq-dev \
-    && docker-php-ext-install -j$(nproc) iconv \
-    && docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ \
-    && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
-    && docker-php-ext-install -j$(nproc) gd pdo pdo_mysql pdo_pgsql pgsql \
-    && rm -rf /var/lib/apt/lists/*
+# use docker-php-extension-installer for automatically get the right packages installed
+ADD --chmod=0755 https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 
+# Install extensions and cleanup in a single layer to reduce image size
+RUN install-php-extensions iconv gd pdo pdo_mysql pdo_pgsql pgsql \
+    && rm -f /usr/src/php.tar.xz /usr/src/php.tar.xz.asc \
+    && apt-get autoremove -y \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+COPY docker/librespeed-php.ini ${PHP_INI_DIR}/conf.d/99-librespeed.ini
 COPY docker/speedtest-php.ini ${PHP_INI_DIR}/conf.d/99-speedtest.ini
-
-
-# RUN sudo apt install mysql-server -y
 
 
 # Prepare files and folders
@@ -30,13 +26,18 @@ COPY results/*.php /speedtest/results/
 COPY results/*.ttf /speedtest/results/
 
 COPY *.js /speedtest/
+COPY index.html /speedtest/
+COPY settings.json /speedtest/
+COPY server-list.json /speedtest/
+COPY stability.html /speedtest/
 COPY favicon.ico /speedtest/
+COPY manifest.webmanifest /speedtest/
+COPY images/ /speedtest/images/
 
 COPY docker/servers.json /servers.json
 
 COPY logo.png /speedtest/
 
-COPY docker/*.php /speedtest/
 COPY docker/entrypoint.sh /
 
 # Prepare default environment variables
@@ -51,6 +52,19 @@ ENV WEBPORT=80
 # https://httpd.apache.org/docs/2.4/stopping.html#gracefulstop
 STOPSIGNAL SIGWINCH
 
+# Add labels for better metadata
+LABEL org.opencontainers.image.title="LibreSpeed"
+LABEL org.opencontainers.image.description="A Free and Open Source speed test that you can host on your server(s)"
+LABEL org.opencontainers.image.vendor="LibreSpeed"
+LABEL org.opencontainers.image.url="https://github.com/librespeed/speedtest"
+LABEL org.opencontainers.image.source="https://github.com/librespeed/speedtest"
+LABEL org.opencontainers.image.documentation="https://github.com/librespeed/speedtest/blob/master/doc_docker.md"
+LABEL org.opencontainers.image.licenses="LGPL-3.0-or-later"
+
+# Add health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:${WEBPORT}/ || exit 1
+
 # Final touches
-EXPOSE 80
+EXPOSE ${WEBPORT}
 CMD ["bash", "/entrypoint.sh"]
