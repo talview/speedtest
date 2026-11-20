@@ -48,7 +48,12 @@ COPY docker/entrypoint.sh /
 # Prepare default environment variables
 ENV TITLE=LibreSpeed
 ENV MODE=standalone
-ENV PASSWORD=password
+# SRE-6218: the literal value PASSWORD disables results/stats.php (see the
+# guard in stats.php). Upstream's default 'password' left the stats page,
+# which lists every test with candidate IP/ISP/UA, open behind a guessable
+# password. Set PASSWORD (letters/digits only) at deploy time to enable it.
+# Never set it to an empty string: stats.php would then accept an empty login.
+ENV PASSWORD=PASSWORD
 ENV TELEMETRY=true
 ENV ENABLE_ID_OBFUSCATION=false
 ENV REDACT_IP_ADDRESSES=false
