@@ -30,6 +30,14 @@
       function I(i) {
         return document.getElementById(i);
       }
+      // SRE-6216 interim pass/fail thresholds (2026-11-20). Was ping<=50 ms, jitter<=30 ms,
+      // UL/DL>=5 Mbps, which assumed candidates near the single EU server; 84% of candidates saw a
+      // warning. Upload 2 Mbps matches the 2 Mbps cap on the LiveKit test track used by the
+      // talview.app pre-check. Replace with media-team numbers once SRE-6221 lands.
+      var PING_MAX_MS = 250,
+        JITTER_MAX_MS = 50,
+        DL_MIN_MBPS = 5,
+        UL_MIN_MBPS = 2;
       //INITIALIZE SPEEDTEST
       var s = new Speedtest(); //create speedtest object
       s.setParameter("telemetry_level", "basic"); //enable telemetry
@@ -59,14 +67,14 @@
       function classifySpeed(value) {
         if (value == "") return 0;
         if (value > 50) return 3;
-        if (value >= 5) return 2;
+        if (value >= DL_MIN_MBPS) return 2;
         return 1;
       }
 
       function classifySpeedUpload(value) {
         if (value == "") return 0;
         if (value > 20) return 3;
-        if (value >= 5) return 2;
+        if (value >= UL_MIN_MBPS) return 2;
         return 1;
       }
 
@@ -118,8 +126,8 @@
 
       function classifyPing(value) {
         if (value == "") return 0;
-        if (value > 100) return 1;
-        if (value >= 20) return 2;
+        if (value > PING_MAX_MS) return 1;
+        if (value >= 100) return 2;
         return 3;
       }
 
@@ -148,8 +156,8 @@
 
       function classifyJitter(value) {
         if (value == "") return 0;
-        if (value > 20) return 1;
-        if (value >= 5) return 2;
+        if (value > JITTER_MAX_MS) return 1;
+        if (value >= 20) return 2;
         return 3;
       }
 
@@ -314,21 +322,21 @@
           flag2 = true;
         }
 
-        if (uiData?.pingStatus > 50 && uiData?.jitterStatus > 30) {
+        if (uiData?.pingStatus > PING_MAX_MS && uiData?.jitterStatus > JITTER_MAX_MS) {
           if (!flag2)
             message =
               "It is recommended to meet threshold speed for a seamless experience. While you can still start with the session, you might encounter errors due to low bandwidth. For help, visit : <a href= https://talview.freshdesk.com/support/solutions/articles/11000129970-steps-to-perform-a-network-test target='_blank'>Talview Support</a>";
           else {
             message += ", and we detected high jitter and ping. ";
           }
-        } else if (uiData?.jitterStatus > 30) {
+        } else if (uiData?.jitterStatus > JITTER_MAX_MS) {
           if (!flag2)
             message =
               "It is recommended to meet threshold speed for a seamless experience. While you can still start with the session, you might encounter errors due to low bandwidth. For help, visit : <a href= https://talview.freshdesk.com/support/solutions/articles/11000129970-steps-to-perform-a-network-test target='_blank'>Talview Support</a>";
           else {
             message += ", and we detected high jitter. ";
           }
-        } else if (uiData?.pingStatus > 50) {
+        } else if (uiData?.pingStatus > PING_MAX_MS) {
           if (!flag2)
             message =
               "It is recommended to meet threshold speed for a seamless experience. While you can still start with the session, you might encounter errors due to low bandwidth. For help, visit : <a href= https://talview.freshdesk.com/support/solutions/articles/11000129970-steps-to-perform-a-network-test target='_blank'>Talview Support</a>";
@@ -339,18 +347,18 @@
 
         if (
           !message &&
-          ((uiData?.ulStatus >= 1 && uiData?.ulStatus < 5) ||
-            (uiData?.dlStatus >= 1 && uiData?.dlStatus < 5))
+          ((uiData?.ulStatus >= 1 && uiData?.ulStatus < UL_MIN_MBPS) ||
+            (uiData?.dlStatus >= 1 && uiData?.dlStatus < DL_MIN_MBPS))
         ) {
           message =
             "It is recommended to meet threshold speed for a seamless experience. While you can still start with the session, you might encounter errors due to low bandwidth. For help, visit: <a href= https://talview.freshdesk.com/support/solutions/articles/11000129970-steps-to-perform-a-network-test target='_blank'>Talview Support</a>";
         }
 
         if (
-          uiData?.dlStatus >= 5 &&
-          uiData?.ulStatus >= 5 &&
-          uiData?.pingStatus <= 50 &&
-          uiData?.jitterStatus <= 30
+          uiData?.dlStatus >= DL_MIN_MBPS &&
+          uiData?.ulStatus >= UL_MIN_MBPS &&
+          uiData?.pingStatus <= PING_MAX_MS &&
+          uiData?.jitterStatus <= JITTER_MAX_MS
         ) {
           message =
             "Your network speed meets the requirements for the session. You’re all set.";
