@@ -1,5 +1,7 @@
-# Pinned to a patched release (CVE-2026-109618/109619). Bump deliberately; do not use a floating tag.
-FROM php:8.4.27-apache
+# Pinned to a patched release. Bump deliberately; do not use a floating tag.
+# 8.4.28 (2026-11-19) fixes 14 CVEs over 8.4.27 (SRE-6671). Dependabot's weekly
+# docker rule (.github/dependabot.yml) proposes the next patch release.
+FROM php:8.4.28-apache
 
 # use docker-php-extension-installer for automatically get the right packages installed
 ADD --chmod=0755 https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
@@ -13,6 +15,9 @@ RUN install-php-extensions iconv gd pdo pdo_mysql pdo_pgsql pgsql \
 
 COPY docker/librespeed-php.ini ${PHP_INI_DIR}/conf.d/99-librespeed.ini
 COPY docker/speedtest-php.ini ${PHP_INI_DIR}/conf.d/99-speedtest.ini
+# SRE-6671: hide the Apache version banner (Server header + error-page footer).
+# zz- sorts after Debian's security.conf, so these directives win.
+COPY docker/apache-hardening.conf /etc/apache2/conf-enabled/zz-hardening.conf
 
 
 # Prepare files and folders
