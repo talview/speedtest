@@ -38,6 +38,14 @@
         JITTER_MAX_MS = 50,
         DL_MIN_MBPS = 5,
         UL_MIN_MBPS = 2;
+      // Render the threshold labels from the constants above so the UI text
+      // cannot drift from the pass/fail logic again.
+      document.addEventListener("DOMContentLoaded", function () {
+        I("pingReq").textContent = "Maximum: " + PING_MAX_MS + " ms";
+        I("jitReq").textContent = "Maximum: " + JITTER_MAX_MS + " ms";
+        I("dlReq").textContent = "Minimum: " + DL_MIN_MBPS + " Mbps";
+        I("ulReq").textContent = "Minimum: " + UL_MIN_MBPS + " Mbps";
+      });
       //INITIALIZE SPEEDTEST
       var s = new Speedtest(); //create speedtest object
       s.setParameter("telemetry_level", "basic"); //enable telemetry
@@ -783,7 +791,7 @@
                   <div class="unit">ms</div>
                 </div>
               </div>
-              <p class="recommended">Recommended: 50ms</p>
+              <p class="recommended" id="pingReq">Maximum: 250 ms</p>
             </div>
 
             <div class="box-container">
@@ -794,7 +802,7 @@
                   <div class="unit">ms</div>
                 </div>
               </div>
-              <p class="recommended">Recommended: 30ms</p>
+              <p class="recommended" id="jitReq">Maximum: 50 ms</p>
             </div>
           </div>
           <div class="testGroup">
@@ -806,7 +814,7 @@
                   <div class="unit">Mbps</div>
                 </div>
               </div>
-              <p class="recommended">Minimum: 5 Mbps</p>
+              <p class="recommended" id="dlReq">Minimum: 5 Mbps</p>
             </div>
 
             <div class="box-container">
@@ -817,7 +825,7 @@
                   <div class="unit">Mbps</div>
                 </div>
               </div>
-              <p class="recommended">Minimum: 5 Mbps</p>
+              <p class="recommended" id="ulReq">Minimum: 2 Mbps</p>
             </div>
           </div>
         </div>
