@@ -544,7 +544,7 @@ function drawClassicImage($speedtest)
     $JIT_TEXT = 'Jitter';
     $DL_TEXT = 'Download';
     $UL_TEXT = 'Upload';
-    $WATERMARK_TEXT = 'LibreSpeed';
+    $WATERMARK_TEXT = 'Talview';
 
     // create text boxes for each part of the image
     $mbpsBbox = imageftbbox($FONT_MEASURE_SIZE_BIG, 0, $FONT_MEASURE, $MBPS_TEXT);

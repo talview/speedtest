@@ -401,10 +401,12 @@ __Main parameters:__
   * Default: `15`
   * Recommended: `>=5`
 * __time_ul_max__: Maximum duration of the upload test in seconds. If auto duration is disabled, this is used as the duration of the test.
-  * Default: `15`
+  * Default: `10`
   * Recommended: `>=10`
 * __time_auto__: Automatically determine the duration of the download and upload tests, making them faster on faster connections, to avoid wasting data.
   * Default: `true`
+* __time_ulAuto__: Apply `time_auto` to the upload test as well. When `false`, the upload test always runs for `time_ul_max` seconds after the grace time.
+  * Default: `false`
 * __count_ping__: How many pings to perform in the ping test
   * Default: `10`
   * Recommended: `>=3, <30`
@@ -480,7 +482,7 @@ __Advanced parameters:__ (Seriously, don't change these unless you know what you
   * Default: `1.5`
   * Recommended: `>=0`
 * __time_ulGraceTime__: How long to wait (in seconds) before actually measuring the upload speed. This is a good idea because we want to wait for the buffers to be full (avoids the peak at the beginning of the test)
-  * Default: `3`
+  * Default: `6`
   * Recommended: `>=1`
 * __ping_allowPerformanceApi__: toggles use of Performance API to improve accuracy of Ping/Jitter test on browsers that support it.
   * Default: `true`
