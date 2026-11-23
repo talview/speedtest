@@ -13,7 +13,7 @@ header('Pragma: no-cache');
 <!DOCTYPE html>
 <html>
     <head>
-        <title>LibreSpeed - Stats</title>
+        <title>Talview - Stats</title>
         <style type="text/css">
             html,body{
                 margin:0;
@@ -61,7 +61,7 @@ header('Pragma: no-cache');
         </style>
     </head>
     <body>
-        <h1>LibreSpeed - Stats</h1>
+        <h1>Talview - Stats</h1>
         <?php
         if (!isset($stats_password) || $stats_password === 'PASSWORD') {
             ?>

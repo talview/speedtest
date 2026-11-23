@@ -39,10 +39,11 @@ function twarn(s) {
 let settings = {
 	mpot: false, //set to true when in MPOT mode
 	test_order: "IP_D_U", //order in which tests will be performed as a string. D=Download, U=Upload, P=Ping+Jitter, I=IP, _=1 second delay
-	time_ul_max: 15, // max duration of upload test in seconds
+	time_ul_max: 10, // max duration of upload test in seconds. Talview IR-4637: 15 -> 10, measured for the full duration (see time_ulAuto)
 	time_dl_max: 15, // max duration of download test in seconds
 	time_auto: true, // if set to true, tests will take less time on faster connections
-	time_ulGraceTime: 3, //time to wait in seconds before actually measuring ul speed (wait for buffers to fill)
+	time_ulAuto: false, // if false, the upload test always runs for time_ul_max even when time_auto is true. Talview IR-4637: on long-RTT links upload is still ramping up when time_auto would end the test
+	time_ulGraceTime: 6, //time to wait in seconds before actually measuring ul speed (wait for buffers to fill). Talview IR-4637: 3 -> 6, upload takes ~8-10 s to ramp up at ~200 ms RTT
 	time_dlGraceTime: 1.5, //time to wait in seconds before actually measuring dl speed (wait for TCP window to increase)
 	count_ping: 10, // number of pings to perform in ping test
 	url_dl: "backend/garbage.php", // path to a large file or garbage.php, used for download test. must be relative to this js file
@@ -560,7 +561,7 @@ function ulTest(done) {
 					}
 				} else {
 					const speed = totLoaded / (t / 1000.0);
-					if (settings.time_auto) {
+					if (settings.time_auto && settings.time_ulAuto) {
 						//decide how much to shorten the test. Every 200ms, the test is shortened by the bonusT calculated here
 						const bonus = (5.0 * speed) / 100000;
 						bonusT += bonus > 400 ? 400 : bonus;
